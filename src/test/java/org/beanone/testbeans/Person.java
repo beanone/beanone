@@ -11,27 +11,27 @@ public class Person implements Serializable {
 	private String lastName;
 	private final List<String> emailAddresses = new ArrayList<String>();
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void addEmailAddress(String emailAddress) {
+		this.emailAddresses.add(emailAddress);
 	}
 
 	public List<String> getEmailAddresses() {
 		return emailAddresses;
 	}
 
-	public void addEmailAddress(String emailAddress) {
-		this.emailAddresses.add(emailAddress);
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }
