@@ -1,7 +1,6 @@
 package org.beanone;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +15,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.DataBinder;
 
 /**
+ * <p>
  * Maps a JavaBean to a flattened Map structure and vise versa.
- * <p/>
- * Issues:
- * <p/>
- * The JavaBean cannot have properties of type Set.
+ * </p>
+ *
+ * <p>
+ * Issues: The JavaBean cannot have properties of type Set.
+ * </p>
  *
  * @author Hongyan Li
  *
@@ -82,10 +83,10 @@ public class BeanMapper {
 	 * @param clazz
 	 *            the class type of the JavaBean the passed in map is
 	 *            un-flattened to.
+	 * @param <T>
+	 *            The class type of the target JavaBean the passed in map is
+	 *            converting to.
 	 * @return a JavaBean of the passed in class type.
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws InvocationTargetException
 	 */
 	public static <T> T fromMap(Map<String, Object> map, Class<T> clazz) {
 		try {
@@ -119,9 +120,6 @@ public class BeanMapper {
 	 * @return all primitive attributes of the bean are flatten into a map with
 	 *         the keys represent the attributes in a dotted format to represent
 	 *         the object structure.
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> toMap(Serializable bean) {
