@@ -80,6 +80,17 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
+	
+	<developers>
+		<developer>
+			<id>hongyan</id>
+			<name>Hongyan Li</name>
+			<email>hongyan99@yahoo.com</email>
+			<roles><role>lead</role></roles>
+			<url>https://www.linkedin.com/in/hongyan99</url>
+		</developer>
+	</developers>
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -155,4 +166,6 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	
 </project>
