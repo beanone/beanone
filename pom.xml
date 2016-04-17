@@ -4,31 +4,50 @@
   <artifactId>beanone</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
+  <properties>
+  	<java.source.version>1.8</java.source.version>
+  	<java.target.version>1.8</java.target.version>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<commons-lang3.version>3.4</commons-lang3.version>
+  	<commons-beanutils.version>1.9.2</commons-beanutils.version>
+  	<spring.version>4.2.5.RELEASE</spring.version>
+  	<jackson-databind.version>2.7.3</jackson-databind.version>
+  	<gson.version>2.4</gson.version>
+  	<junit.version>4.12</junit.version>
+  	<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+  </properties>
+  
   <dependencies>
 	<dependency>
 		<groupId>org.apache.commons</groupId>
 		<artifactId>commons-lang3</artifactId>
-		<version>3.4</version>
+		<version>${commons-lang3.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>commons-beanutils</groupId>
 		<artifactId>commons-beanutils</artifactId>
-		<version>1.9.2</version>
+		<version>${commons-beanutils.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework.integration</groupId>
 		<artifactId>spring-integration-core</artifactId>
-		<version>4.2.5.RELEASE</version>
+		<version>${spring.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-databind</artifactId>
-		<version>2.7.3</version>
+		<version>${jackson-databind.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+		<version>${gson.version}</version>
+		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
-		<version>4.12</version>
+		<version>${junit.version}</version>
 	</dependency>
   </dependencies>
   <build>
@@ -36,10 +55,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>${java.source.version}</source>
+          <target>${java.target.version}</target>
         </configuration>
       </plugin>
     </plugins>

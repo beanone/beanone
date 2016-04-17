@@ -9,35 +9,35 @@ public class BeanWithSimpleAttributes implements Serializable {
 	private String string = "A string";
 	private Object doubleAsObject = new Double(3);
 
-	public int getInteger() {
-		return integer;
+	public Object getDoubleAsObject() {
+		return doubleAsObject;
 	}
 
-	public void setInteger(int integer) {
-		this.integer = integer;
+	public int getInteger() {
+		return integer;
 	}
 
 	public Integer getIntObject() {
 		return intObject;
 	}
 
-	public void setIntObject(Integer intObject) {
-		this.intObject = intObject;
-	}
-
 	public String getString() {
 		return string;
 	}
 
-	public void setString(String string) {
-		this.string = string;
-	}
-
-	public Object getDoubleAsObject() {
-		return doubleAsObject;
-	}
-
 	public void setDoubleAsObject(Object doubleAsObject) {
 		this.doubleAsObject = doubleAsObject;
+	}
+
+	public void setInteger(int integer) {
+		this.integer = integer;
+	}
+
+	public void setIntObject(Integer intObject) {
+		this.intObject = intObject;
+	}
+
+	public void setString(String string) {
+		this.string = string;
 	}
 }

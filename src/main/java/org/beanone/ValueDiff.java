@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Stores the value differences in a BeanPatch. A ValueDiff has no meaning when
  * used outside of a {@link BeanPatch}. It is useful only if used inside a
  * BeanPatch.
- * 
+ *
  * @author Hongyan Li
  *
  */
@@ -15,14 +15,14 @@ public class ValueDiff implements Serializable {
 
 	public static ValueDiff makeDiff(Object oldValue, Object newValue) {
 		final ValueDiff returns = new ValueDiff();
-		returns.oldValue = oldValue;
-		returns.newValue = newValue;
+		returns.oldValue = BeanOneUtils.ensureSerializable(oldValue);
+		returns.newValue = BeanOneUtils.ensureSerializable(newValue);
 		return returns;
 	}
 
-	private Object oldValue;
+	private Serializable oldValue;
 
-	private Object newValue;
+	private Serializable newValue;
 
 	public ValueDiff() {
 		// default constructor to make this a valid JavaBean

@@ -18,6 +18,12 @@ public class BeanPatchTest {
 	}
 
 	@Test
+	public void testCreateWithAdditionAndUpdates() throws Exception {
+		BeanPatch<Person> patch = BeanPatch.create(person, person2);
+		validateChanges(patch, 1, 0, 1);
+	}
+
+	@Test
 	public void testCreateWithAdditions() throws Exception {
 		BeanPatch<Person> patch = BeanPatch.create(person, person1);
 		validateChanges(patch, 3, 0, 0);
@@ -29,13 +35,8 @@ public class BeanPatchTest {
 		validateChanges(patch, 0, 3, 0);
 	}
 
-	@Test
-	public void testCreateWithAdditionAndUpdates() throws Exception {
-		BeanPatch<Person> patch = BeanPatch.create(person, person2);
-		validateChanges(patch, 1, 0, 1);
-	}
-
-	private void validateChanges(BeanPatch<Person> patch, int additions, int deletions, int updates) {
+	private void validateChanges(BeanPatch<Person> patch, int additions,
+	        int deletions, int updates) {
 		Assert.assertNotNull(patch.getAdditions());
 		Assert.assertEquals(additions, patch.getAdditions().size());
 		Assert.assertNotNull(patch.getDeletions());

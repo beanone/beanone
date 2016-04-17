@@ -1,7 +1,6 @@
 package org.beanone;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -17,13 +16,11 @@ import org.apache.commons.lang3.SerializationUtils;
  *            the type of JavaBean this snapshot is for.
  */
 class BeanSnapshot<T extends Serializable> {
-	private final T					state;
-	private final BeanHistory<T>	beanHistory;
-	private final int				version;
+	private final T state;
+	private final BeanHistory<T> beanHistory;
+	private final int version;
 
-	public BeanSnapshot(T bean, BeanHistory<T> beanHistory, int version)
-	        throws IllegalAccessException, InstantiationException,
-	        InvocationTargetException, NoSuchMethodException {
+	public BeanSnapshot(T bean, BeanHistory<T> beanHistory, int version) {
 		this.state = SerializationUtils.clone(bean);
 		this.beanHistory = beanHistory;
 		this.version = version;
@@ -33,8 +30,7 @@ class BeanSnapshot<T extends Serializable> {
 		return beanHistory;
 	}
 
-	public T getState() throws IllegalAccessException, InstantiationException,
-	        InvocationTargetException, NoSuchMethodException {
+	public T getState() {
 		return SerializationUtils.clone(state);
 	}
 
@@ -50,9 +46,7 @@ class BeanSnapshot<T extends Serializable> {
 		return version == getBeanHistory().getPatches().size();
 	}
 
-	public BeanSnapshot<T> nextVersion()
-	        throws IllegalAccessException, InstantiationException,
-	        InvocationTargetException, NoSuchMethodException {
+	public BeanSnapshot<T> nextVersion() {
 		if (version >= getBeanHistory().getPatches().size()) {
 			return null;
 		} else {
@@ -62,9 +56,7 @@ class BeanSnapshot<T extends Serializable> {
 		}
 	}
 
-	public BeanSnapshot<T> previousVersion()
-	        throws IllegalAccessException, InstantiationException,
-	        InvocationTargetException, NoSuchMethodException {
+	public BeanSnapshot<T> previousVersion() {
 		if (version == 0) {
 			return null;
 		} else {
