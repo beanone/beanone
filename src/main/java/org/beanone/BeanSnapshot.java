@@ -3,71 +3,74 @@ package org.beanone;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.SerializationUtils;
 
 /**
  * The snapshot of a bean. With a BeanSnapshot, one can easily navigate in
  * between the different versions of a JavaBean.
  * <p/>
  * A BeanSnapshot is intentionally made not a {@link Serializable}.
- * 
- * @author hongliii
+ *
+ * @author Hongyan Li
  *
  * @param <T>
  *            the type of JavaBean this snapshot is for.
  */
-class BeanSnapshot<T> {
-    private final T state;
-    private final BeanHistory<T> beanDocument;
-    private final int version;
+class BeanSnapshot<T extends Serializable> {
+	private final T					state;
+	private final BeanHistory<T>	beanHistory;
+	private final int				version;
 
-    public int getVersion() {
-        return version;
-    }
+	public BeanSnapshot(T bean, BeanHistory<T> beanHistory, int version)
+	        throws IllegalAccessException, InstantiationException,
+	        InvocationTargetException, NoSuchMethodException {
+		this.state = SerializationUtils.clone(bean);
+		this.beanHistory = beanHistory;
+		this.version = version;
+	}
 
-    @SuppressWarnings("unchecked")
-    public BeanSnapshot(T bean, BeanHistory<T> beanDocument, int version)
-            throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
-        this.state = (T) BeanUtils.cloneBean(bean);
-        this.beanDocument = beanDocument;
-        this.version = version;
-    }
+	BeanHistory<T> getBeanHistory() {
+		return beanHistory;
+	}
 
-    @SuppressWarnings("unchecked")
-    public T getState()
-            throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
-        return (T) BeanUtils.cloneBean(state);
-    }
+	public T getState() throws IllegalAccessException, InstantiationException,
+	        InvocationTargetException, NoSuchMethodException {
+		return SerializationUtils.clone(state);
+	}
 
-    public BeanSnapshot<T> previousVersion()
-            throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
-        if (version == 0) {
-            return null;
-        } else {
-            final BeanPatch<T> patch = getBeanDocument().getPatches().get(version - 1);
-            return patch.substractFrom(this);
-        }
-    }
+	public int getVersion() {
+		return version;
+	}
 
-    public BeanSnapshot<T> nextVersion()
-            throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
-        if (version == getBeanDocument().getPatches().size() - 1) {
-            return null;
-        } else {
-            final BeanPatch<T> patch = getBeanDocument().getPatches().get(version + 1);
-            return patch.addTo(this);
-        }
-    }
+	boolean isBaseSnapshot() {
+		return version == 0;
+	}
 
-    BeanHistory<T> getBeanDocument() {
-        return beanDocument;
-    }
+	boolean isLatestSnapshot() {
+		return version == getBeanHistory().getPatches().size();
+	}
 
-    boolean isBaseSnapshot() {
-        return version == 0;
-    }
+	public BeanSnapshot<T> nextVersion()
+	        throws IllegalAccessException, InstantiationException,
+	        InvocationTargetException, NoSuchMethodException {
+		if (version >= getBeanHistory().getPatches().size()) {
+			return null;
+		} else {
+			final BeanPatch<T> patch = getBeanHistory().getPatches()
+			        .get(version);
+			return patch.addTo(this);
+		}
+	}
 
-    boolean isLatestSnapshot() {
-        return version == getBeanDocument().getPatches().size() - 1;
-    }
+	public BeanSnapshot<T> previousVersion()
+	        throws IllegalAccessException, InstantiationException,
+	        InvocationTargetException, NoSuchMethodException {
+		if (version == 0) {
+			return null;
+		} else {
+			final BeanPatch<T> patch = getBeanHistory().getPatches()
+			        .get(version - 1);
+			return patch.substractFrom(this);
+		}
+	}
 }

@@ -1,5 +1,11 @@
 package org.beanone;
 
+/**
+ * Exception when trying to flatten a JavaBean into a flattened map structure.
+ * 
+ * @author Hongyan Li
+ *
+ */
 public class BeanFlattenException extends RuntimeException {
 	public BeanFlattenException(String message, Exception e) {
 		super(message, e);

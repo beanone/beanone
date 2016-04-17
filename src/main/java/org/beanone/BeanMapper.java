@@ -1,5 +1,6 @@
 package org.beanone;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.beans.MutablePropertyValues;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.integration.support.json.JsonObjectMapper;
 import org.springframework.integration.support.json.JsonObjectMapperProvider;
@@ -22,7 +22,7 @@ import org.springframework.validation.DataBinder;
  * <p/>
  * The JavaBean cannot have properties of type Set.
  * 
- * @author hongliii
+ * @author Hongyan Li
  *
  */
 public class BeanMapper {
@@ -86,7 +86,7 @@ public class BeanMapper {
 		T target = clazz.newInstance();
 
 		DataBinder binder = new DataBinder(target);
-		ConversionService conversionService = new DefaultConversionService();
+		DefaultConversionService conversionService = new DefaultConversionService();
 
 		binder.setConversionService(conversionService);
 		binder.bind(new MutablePropertyValues(map));
@@ -107,7 +107,7 @@ public class BeanMapper {
 	 * @throws IllegalAccessException
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> toMap(Object bean)
+	public static Map<String, Object> toMap(Serializable bean)
 			throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		if (bean == null) {
 			throw new IllegalArgumentException("The passed in bean is null!");

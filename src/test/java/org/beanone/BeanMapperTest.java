@@ -10,6 +10,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class BeanMapperTest {
+	@Test(expected = IllegalArgumentException.class)
+	public void testToMapForNullBean() throws Exception {
+		BeanMapper.toMap(null);
+	}
+
 	@Test
 	public void testToMapForBeanWithSimpleAttributes() throws Exception {
 		Map<String, Object> map = BeanMapper.toMap(new BeanWithSimpleAttributes());
