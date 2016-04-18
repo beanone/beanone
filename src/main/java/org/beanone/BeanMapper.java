@@ -3,6 +3,7 @@ package org.beanone;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -105,9 +106,12 @@ public class BeanMapper {
 	}
 
 	private static void removeNullValues(final Map<String, Object> resultMap) {
-		for (final Entry<String, Object> entry : resultMap.entrySet()) {
+		final Iterator<Entry<String, Object>> entryIter = resultMap.entrySet()
+		        .iterator();
+		while (entryIter.hasNext()) {
+			final Entry<String, Object> entry = entryIter.next();
 			if (entry.getValue() == null) {
-				resultMap.remove(entry.getKey());
+				entryIter.remove();
 			}
 		}
 	}
