@@ -7,6 +7,10 @@ import java.io.Serializable;
  * used outside of a {@link BeanPatch}. It is useful only if used inside a
  * BeanPatch.
  *
+ * <p>
+ * This is immutable.
+ * </P>
+ *
  * @author Hongyan Li
  *
  */
@@ -20,9 +24,10 @@ public class ValueDiff implements Serializable {
 		return returns;
 	}
 
-	private Serializable oldValue;
-
-	private Serializable newValue;
+	// note that if these member attributes are declared as Serializable, then
+	// Gson is going to fail on de-serialization.
+	private Object oldValue;
+	private Object newValue;
 
 	public ValueDiff() {
 		// default constructor to make this a valid JavaBean

@@ -1,5 +1,7 @@
 package org.beanone;
 
+import java.util.List;
+
 import org.beanone.testbeans.TestObjectFactory;
 import org.beanone.testbeans.UserDetail;
 import org.junit.Assert;
@@ -20,6 +22,15 @@ public class BeanHistoryTest {
 		Assert.assertNotNull(bh.getInitialSnapshot());
 		Assert.assertNotNull(bh.getLastestSnapshot());
 		Assert.assertEquals(0, bh.getPatches().size());
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testBeanHistoryGetPatchesUnmodifiable() throws Exception {
+		final BeanHistory<UserDetail> hist = TestObjectFactory
+		        .createTestBeanHistoryWithThreeVersions();
+		final List<BeanPatch<UserDetail>> patches = hist.getPatches();
+		Assert.assertEquals(2, patches.size());
+		patches.remove(0);
 	}
 
 	@Test

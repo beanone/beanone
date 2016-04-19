@@ -1,6 +1,10 @@
 package org.beanone.testbeans;
 
 import org.beanone.BeanHistory;
+import org.beanone.ValueDiff;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class TestObjectFactory {
 	public static Address createAddress(String addressLine1, String city,
@@ -10,6 +14,11 @@ public class TestObjectFactory {
 		address.setCity(city);
 		address.setZip(zip);
 		return address;
+	}
+
+	public static Gson createGson() {
+		return new GsonBuilder().registerTypeAdapter(ValueDiff.class,
+		        new ValueDiffInstanceCreator()).create();
 	}
 
 	public static Person createPerson(String firstName, String lastName) {

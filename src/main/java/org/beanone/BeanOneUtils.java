@@ -2,6 +2,12 @@ package org.beanone;
 
 import java.io.Serializable;
 
+/**
+ * Contains utility methods of this library.
+ *
+ * @author Hongyan Li
+ *
+ */
 class BeanOneUtils {
 	static Serializable ensureSerializable(Object value) {
 		if (value == null) {
