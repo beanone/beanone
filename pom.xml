@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.beanone</groupId>
 	<artifactId>beanone</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-snapshot</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A utility library that allows one to easily manage the history of a JavaBean</description>
@@ -161,7 +161,7 @@
 				<configuration>
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>false</autoReleaseAfterClose>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
 		</plugins>

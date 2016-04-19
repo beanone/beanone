@@ -7,8 +7,15 @@ import org.apache.commons.lang3.SerializationUtils;
 /**
  * The snapshot of a bean. With a BeanSnapshot, one can easily navigate in
  * between the different versions of a JavaBean.
- * <p/>
+ *
+ * <p>
  * A BeanSnapshot is intentionally made not a {@link Serializable}.
+ * </p>
+ *
+ * <p>
+ * This is largely immutable. The only way to "modify" this is through modifying
+ * the BeanHistory.
+ * </p>
  *
  * @author Hongyan Li
  *
@@ -26,26 +33,49 @@ class BeanSnapshot<T extends Serializable> {
 		this.version = version;
 	}
 
+	/**
+	 * @return The {@link BeanHistory} this snapshot is for.
+	 */
 	BeanHistory<T> getBeanHistory() {
 		return beanHistory;
 	}
 
+	/**
+	 * @return the JavaBean state this snapshot is for. You can freely change
+	 *         the object returned since it is a deep clone of the object
+	 *         contained in this snapshot.
+	 */
 	public T getState() {
 		return SerializationUtils.clone(state);
 	}
 
+	/**
+	 * @return the version of the snapshot. The version is a automatically
+	 *         generated integer, it start 0 and increments by 1.
+	 */
 	public int getVersion() {
 		return version;
 	}
 
+	/**
+	 * @return true if this is version 0.
+	 */
 	boolean isBaseSnapshot() {
 		return version == 0;
 	}
 
+	/**
+	 * @return true if this is the latest version of the whole
+	 *         {@link BeanHistory}.
+	 */
 	boolean isLatestSnapshot() {
 		return version == getBeanHistory().getPatches().size();
 	}
 
+	/**
+	 * @return the next version of the snapshots of the BeanHistory. If this is
+	 *         already the latest version, then return null.
+	 */
 	public BeanSnapshot<T> nextVersion() {
 		if (version >= getBeanHistory().getPatches().size()) {
 			return null;
@@ -56,6 +86,10 @@ class BeanSnapshot<T extends Serializable> {
 		}
 	}
 
+	/**
+	 * @return the previous version of the snapshots of the BeanHistory. If this
+	 *         is already version 0, then return null.
+	 */
 	public BeanSnapshot<T> previousVersion() {
 		if (version == 0) {
 			return null;

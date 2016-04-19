@@ -19,9 +19,18 @@ import java.util.Set;
 public class BeanPatch<T extends Serializable> implements Serializable {
 	private static final long serialVersionUID = -2602568652611370513L;
 
+	/**
+	 * Creates a patch the contains the difference in between the two passed in
+	 * JavaBeans.
+	 *
+	 * @param base
+	 *            the base of the patch is created for.
+	 * @param updated
+	 *            the updated JavaBean is the patch is applied to the base.
+	 * @return the patch.
+	 */
 	public static <T extends Serializable> BeanPatch<T> create(T base,
 	        T updated) {
-		// TODO: turn both into a map and compare the difference
 		final Map<String, Object> baseMap = BeanMapper.toMap(base);
 		final Map<String, Object> updatedMap = BeanMapper.toMap(updated);
 
@@ -54,12 +63,18 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 		return returns;
 	}
 
-	// stores the old and new values in ValueDiffs, key might point to simple
-	// attributes or indexed attributes
 	private final Map<String, Serializable> additions = new HashMap<>();
 	private final Map<String, Serializable> deletions = new HashMap<>();
 	private final Map<String, ValueDiff> updates = new HashMap<>();
 
+	/**
+	 * Applies the current patch to the passed in. This method can be used to
+	 * support redo operation.
+	 *
+	 * @param snapshot
+	 *            the bases snapshot the patch is applied to.
+	 * @return the new JavaBean after the patch is applied to the passed in.
+	 */
 	@SuppressWarnings("unchecked")
 	public BeanSnapshot<T> addTo(BeanSnapshot<T> snapshot) {
 		final T original = snapshot.getState();
@@ -81,23 +96,51 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 		        snapshot.getVersion() + 1);
 	}
 
+	/**
+	 * The additions this patch contains.
+	 *
+	 * @return a map of attribute key / value pairs.
+	 */
 	public Map<String, Object> getAdditions() {
 		return Collections.unmodifiableMap(additions);
 	}
 
+	/**
+	 * The deletions this patch contains.
+	 *
+	 * @return a map of attribute key / value pairs.
+	 */
 	public Map<String, Object> getDeletions() {
 		return Collections.unmodifiableMap(deletions);
 	}
 
+	/**
+	 * The updates this patch contains.
+	 *
+	 * @return a map of attribute key / value pairs.
+	 */
 	public Map<String, ValueDiff> getUpdates() {
 		return Collections.unmodifiableMap(updates);
 	}
 
+	/**
+	 * @return true if no additions, no deletions and updates. Otherwise return
+	 *         true.
+	 */
 	public boolean hasChanges() {
 		return !(additions.isEmpty() && deletions.isEmpty()
 		        && updates.isEmpty());
 	}
 
+	/**
+	 * un-applies the current patch to the passed in. This method can be used to
+	 * support undo operation.
+	 *
+	 * @param snapshot
+	 *            the snapshot the patch is un-applied from.
+	 * @return the base JavaBean after the patch is un-applied from the passed
+	 *         in.
+	 */
 	@SuppressWarnings("unchecked")
 	public BeanSnapshot<T> substractFrom(BeanSnapshot<T> snapshot) {
 		final T original = snapshot.getState();
