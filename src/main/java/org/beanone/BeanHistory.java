@@ -12,7 +12,7 @@ import org.apache.commons.lang3.SerializationUtils;
  * updates.
  *
  * <p>
- * The only way to update a BeanHistory is throw one of the createPatch()
+ * The only way to update a BeanHistory is through one of the createPatch()
  * methods.
  * </p>
  *
@@ -28,10 +28,10 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	private final List<BeanPatch<T>> patches = new ArrayList<>();
 
 	/**
-	 * Construct a new instance of this from a JavaBean.
+	 * Constructs a new instance of this from a JavaBean.
 	 *
 	 * @param bean
-	 *            a JavaBean. Note: it must be Serializable.
+	 *            a JavaBean. Note: it must be a Serializable.
 	 */
 	public BeanHistory(T bean) {
 		this.initialState = SerializationUtils.clone(bean);
@@ -45,7 +45,7 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 *            a callback that this calls to get the updated state of the
 	 *            JavaBean the patch will be created from.
 	 * @return a new patch if the new JavaBean contains any change in the bean
-	 *         attributes. If no change is found, return null.
+	 *         attributes. If no change is found, returns null.
 	 */
 	public BeanPatch<T> createPatch(BeanUpdater<T> updater) {
 		final T newBean = SerializationUtils.clone(latestState);
@@ -59,7 +59,7 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 * @param newBean
 	 *            a JavaBean that represent the new state of the JavaBean.
 	 * @return a new patch if the new JavaBean contains any change in the bean
-	 *         attributes. If no change is found, return null.
+	 *         attributes. If no change is found, returns null.
 	 */
 	public BeanPatch<T> createPatch(final T newBean) {
 		final T newLatest = SerializationUtils.clone(newBean);
@@ -87,7 +87,8 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	}
 
 	/**
-	 * @return the initial state of the JavaBean.
+	 * @return the initial state of the JavaBean. You can safely edit the
+	 *         returned JavaBean since it is a a deep clone of what is in this.
 	 */
 	public T getInitialState() {
 		return SerializationUtils.clone(initialState);
@@ -103,7 +104,8 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	}
 
 	/**
-	 * @return the latest state of the JavaBean.
+	 * @return the latest state of the JavaBean. You can safely edit the
+	 *         returned JavaBean since it is a a deep clone of what is in this.
 	 */
 	public T getLatestState() {
 		return SerializationUtils.clone(latestState);

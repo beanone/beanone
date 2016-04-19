@@ -74,12 +74,12 @@ public class BeanMapper {
 	}
 
 	/**
-	 * un-flattens the passed in Map of primitive values into a JavaBean of the
+	 * un-flattens the passed in Map of simple values into a JavaBean of the
 	 * passed in class type.
 	 *
 	 * @param map
-	 *            a Map that contains all the primitive attributes of the bean
-	 *            with dotted format to represent the keys for attributes of
+	 *            a Map that contains all the simple attributes of the bean with
+	 *            dotted format to represent the keys for attributes of
 	 *            non-primitive attributes.
 	 * @param clazz
 	 *            the class type of the JavaBean the passed in map is
@@ -117,7 +117,7 @@ public class BeanMapper {
 	}
 
 	/**
-	 * Flattens the passed in bean into a Map of primitive values.
+	 * Flattens the passed in bean into a Map of simple values.
 	 *
 	 * @param bean
 	 *            a JavaBean object.

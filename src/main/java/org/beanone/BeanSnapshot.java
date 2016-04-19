@@ -27,6 +27,17 @@ class BeanSnapshot<T extends Serializable> {
 	private final BeanHistory<T> beanHistory;
 	private final int version;
 
+	/**
+	 * Constructs a new instance of this from a JavaBean, its history and a
+	 * version number.
+	 *
+	 * @param bean
+	 *            the bean state this snapshot is for.
+	 * @param beanHistory
+	 *            the bean history this snapshot is part of.
+	 * @param version
+	 *            the version of this snapshot.
+	 */
 	public BeanSnapshot(T bean, BeanHistory<T> beanHistory, int version) {
 		this.state = SerializationUtils.clone(bean);
 		this.beanHistory = beanHistory;
@@ -50,8 +61,8 @@ class BeanSnapshot<T extends Serializable> {
 	}
 
 	/**
-	 * @return the version of the snapshot. The version is a automatically
-	 *         generated integer, it start 0 and increments by 1.
+	 * @return the version of the snapshot. The version is an automatically
+	 *         generated integer, it starts from 0 and increments by 1.
 	 */
 	public int getVersion() {
 		return version;
@@ -73,8 +84,8 @@ class BeanSnapshot<T extends Serializable> {
 	}
 
 	/**
-	 * @return the next version of the snapshots of the BeanHistory. If this is
-	 *         already the latest version, then return null.
+	 * @return the next version snapshot of the BeanHistory. If this is already
+	 *         the latest version, then return null.
 	 */
 	public BeanSnapshot<T> nextVersion() {
 		if (version >= getBeanHistory().getPatches().size()) {
@@ -87,8 +98,8 @@ class BeanSnapshot<T extends Serializable> {
 	}
 
 	/**
-	 * @return the previous version of the snapshots of the BeanHistory. If this
-	 *         is already version 0, then return null.
+	 * @return the previous version snapshot of the BeanHistory. If this is
+	 *         already version 0, then return null.
 	 */
 	public BeanSnapshot<T> previousVersion() {
 		if (version == 0) {
