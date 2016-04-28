@@ -27,7 +27,7 @@
 		<java.source.version>1.8</java.source.version>
 		<java.target.version>1.8</java.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<commons-lang3.version>3.4</commons-lang3.version>
+		<commons-lang.version>2.6</commons-lang.version>
 		<commons-beanutils.version>1.9.2</commons-beanutils.version>
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<jackson-databind.version>2.7.3</jackson-databind.version>
@@ -38,9 +38,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -168,4 +168,7 @@
 	</build>
 	
 	
+	<issueManagement>
+		<url>https://github.com/hongyan99/beanone/issues</url>
+	</issueManagement>
 </project>

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang.SerializationUtils;
 
 /**
  * A document that holds the whole history of a JavaBean as a sequence of patch
@@ -34,7 +34,7 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 *            a JavaBean. Note: it must be a Serializable.
 	 */
 	public BeanHistory(T bean) {
-		this.initialState = SerializationUtils.clone(bean);
+		this.initialState = cloneBean(bean);
 		this.latestState = this.initialState;
 	}
 
@@ -48,7 +48,7 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 *         attributes. If no change is found, returns null.
 	 */
 	public BeanPatch<T> createPatch(BeanUpdater<T> updater) {
-		final T newBean = SerializationUtils.clone(latestState);
+		final T newBean = cloneBean(latestState);
 		updater.update(newBean);
 		return doCreatePatch(newBean);
 	}
@@ -62,19 +62,8 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 *         attributes. If no change is found, returns null.
 	 */
 	public BeanPatch<T> createPatch(final T newBean) {
-		final T newLatest = SerializationUtils.clone(newBean);
+		final T newLatest = cloneBean(newBean);
 		return doCreatePatch(newLatest);
-	}
-
-	private BeanPatch<T> doCreatePatch(final T newBean) {
-		final BeanPatch<T> returns = BeanPatch.create(latestState, newBean);
-		if (returns.hasChanges()) {
-			patches.add(returns);
-			this.latestState = newBean;
-			return returns;
-		} else {
-			return null;
-		}
 	}
 
 	/**
@@ -91,7 +80,7 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 *         returned JavaBean since it is a a deep clone of what is in this.
 	 */
 	public T getInitialState() {
-		return SerializationUtils.clone(initialState);
+		return cloneBean(initialState);
 	}
 
 	/**
@@ -108,7 +97,7 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 *         returned JavaBean since it is a a deep clone of what is in this.
 	 */
 	public T getLatestState() {
-		return SerializationUtils.clone(latestState);
+		return cloneBean(latestState);
 	}
 
 	/**
@@ -116,5 +105,21 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 	 */
 	public List<BeanPatch<T>> getPatches() {
 		return Collections.unmodifiableList(patches);
+	}
+
+	@SuppressWarnings("unchecked")
+	private T cloneBean(final T newBean) {
+		return (T) SerializationUtils.clone(newBean);
+	}
+
+	private BeanPatch<T> doCreatePatch(final T newBean) {
+		final BeanPatch<T> returns = BeanPatch.create(latestState, newBean);
+		if (returns.hasChanges()) {
+			patches.add(returns);
+			this.latestState = newBean;
+			return returns;
+		} else {
+			return null;
+		}
 	}
 }

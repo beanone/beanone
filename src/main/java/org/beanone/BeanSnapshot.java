@@ -2,7 +2,7 @@ package org.beanone;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang.SerializationUtils;
 
 /**
  * The snapshot of a bean. With a BeanSnapshot, one can easily navigate in
@@ -39,16 +39,9 @@ class BeanSnapshot<T extends Serializable> {
 	 *            the version of this snapshot.
 	 */
 	public BeanSnapshot(T bean, BeanHistory<T> beanHistory, int version) {
-		this.state = SerializationUtils.clone(bean);
+		this.state = cloneBean(bean);
 		this.beanHistory = beanHistory;
 		this.version = version;
-	}
-
-	/**
-	 * @return The {@link BeanHistory} this snapshot is for.
-	 */
-	BeanHistory<T> getBeanHistory() {
-		return beanHistory;
 	}
 
 	/**
@@ -57,7 +50,7 @@ class BeanSnapshot<T extends Serializable> {
 	 *         contained in this snapshot.
 	 */
 	public T getState() {
-		return SerializationUtils.clone(state);
+		return cloneBean(state);
 	}
 
 	/**
@@ -66,21 +59,6 @@ class BeanSnapshot<T extends Serializable> {
 	 */
 	public int getVersion() {
 		return version;
-	}
-
-	/**
-	 * @return true if this is version 0.
-	 */
-	boolean isBaseSnapshot() {
-		return version == 0;
-	}
-
-	/**
-	 * @return true if this is the latest version of the whole
-	 *         {@link BeanHistory}.
-	 */
-	boolean isLatestSnapshot() {
-		return version == getBeanHistory().getPatches().size();
 	}
 
 	/**
@@ -109,5 +87,32 @@ class BeanSnapshot<T extends Serializable> {
 			        .get(version - 1);
 			return patch.substractFrom(this);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private T cloneBean(T bean) {
+		return (T) SerializationUtils.clone(bean);
+	}
+
+	/**
+	 * @return The {@link BeanHistory} this snapshot is for.
+	 */
+	BeanHistory<T> getBeanHistory() {
+		return beanHistory;
+	}
+
+	/**
+	 * @return true if this is version 0.
+	 */
+	boolean isBaseSnapshot() {
+		return version == 0;
+	}
+
+	/**
+	 * @return true if this is the latest version of the whole
+	 *         {@link BeanHistory}.
+	 */
+	boolean isLatestSnapshot() {
+		return version == getBeanHistory().getPatches().size();
 	}
 }

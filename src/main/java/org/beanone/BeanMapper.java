@@ -31,6 +31,60 @@ public class BeanMapper {
 	private static final JsonObjectMapper<?, ?> JSON_OBJECT_MAPPER = JsonObjectMapperProvider
 	        .newInstance();
 
+	/**
+	 * un-flattens the passed in Map of simple values into a JavaBean of the
+	 * passed in class type.
+	 *
+	 * @param map
+	 *            a Map that contains all the simple attributes of the bean with
+	 *            dotted format to represent the keys for attributes of
+	 *            non-primitive attributes.
+	 * @param clazz
+	 *            the class type of the JavaBean the passed in map is
+	 *            un-flattened to.
+	 * @param <T>
+	 *            The class type of the target JavaBean the passed in map is
+	 *            converting to.
+	 * @return a JavaBean of the passed in class type.
+	 */
+	public static <T> T fromMap(Map<String, Object> map, Class<T> clazz) {
+		try {
+			final T target = clazz.newInstance();
+
+			final DataBinder binder = new DataBinder(target);
+			final DefaultConversionService conversionService = new DefaultConversionService();
+			binder.setConversionService(conversionService);
+			binder.bind(new MutablePropertyValues(map));
+
+			return target;
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new ConversionException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Flattens the passed in bean into a Map of simple values.
+	 *
+	 * @param bean
+	 *            a JavaBean object.
+	 * @return all primitive attributes of the bean are flatten into a map with
+	 *         the keys represent the attributes in a dotted format to represent
+	 *         the object structure.
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> toMap(Serializable bean) {
+		if (bean == null) {
+			throw new IllegalArgumentException("The passed in bean is null!");
+		}
+		try {
+			final Map<String, Object> result = JSON_OBJECT_MAPPER
+			        .fromJson(JSON_OBJECT_MAPPER.toJson(bean), Map.class);
+			return flattenMap(result);
+		} catch (final Exception e) {
+			throw new ConversionException(e.getMessage(), e);
+		}
+	}
+
 	private static void doFlatten(final String propertyPrefix,
 	        Map<String, Object> inputMap, Map<String, Object> resultMap) {
 		String prefix = propertyPrefix;
@@ -73,38 +127,6 @@ public class BeanMapper {
 		return resultMap;
 	}
 
-	/**
-	 * un-flattens the passed in Map of simple values into a JavaBean of the
-	 * passed in class type.
-	 *
-	 * @param map
-	 *            a Map that contains all the simple attributes of the bean with
-	 *            dotted format to represent the keys for attributes of
-	 *            non-primitive attributes.
-	 * @param clazz
-	 *            the class type of the JavaBean the passed in map is
-	 *            un-flattened to.
-	 * @param <T>
-	 *            The class type of the target JavaBean the passed in map is
-	 *            converting to.
-	 * @return a JavaBean of the passed in class type.
-	 */
-	public static <T> T fromMap(Map<String, Object> map, Class<T> clazz) {
-		try {
-			final T target = clazz.newInstance();
-
-			final DataBinder binder = new DataBinder(target);
-			final DefaultConversionService conversionService = new DefaultConversionService();
-
-			binder.setConversionService(conversionService);
-			binder.bind(new MutablePropertyValues(map));
-
-			return target;
-		} catch (InstantiationException | IllegalAccessException e) {
-			throw new ConversionException(e.getMessage(), e);
-		}
-	}
-
 	private static void removeNullValues(final Map<String, Object> resultMap) {
 		final Iterator<Entry<String, Object>> entryIter = resultMap.entrySet()
 		        .iterator();
@@ -113,29 +135,6 @@ public class BeanMapper {
 			if (entry.getValue() == null) {
 				entryIter.remove();
 			}
-		}
-	}
-
-	/**
-	 * Flattens the passed in bean into a Map of simple values.
-	 *
-	 * @param bean
-	 *            a JavaBean object.
-	 * @return all primitive attributes of the bean are flatten into a map with
-	 *         the keys represent the attributes in a dotted format to represent
-	 *         the object structure.
-	 */
-	@SuppressWarnings("unchecked")
-	public static Map<String, Object> toMap(Serializable bean) {
-		if (bean == null) {
-			throw new IllegalArgumentException("The passed in bean is null!");
-		}
-		try {
-			final Map<String, Object> result = JSON_OBJECT_MAPPER
-			        .fromJson(JSON_OBJECT_MAPPER.toJson(bean), Map.class);
-			return flattenMap(result);
-		} catch (final Exception e) {
-			throw new ConversionException(e.getMessage(), e);
 		}
 	}
 
