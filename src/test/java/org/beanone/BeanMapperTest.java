@@ -36,23 +36,22 @@ public class BeanMapperTest {
 	}
 
 	@Test
-	public void testToMapForBeanWithCollectionsOfSimpleAttributes()
-	        throws Exception {
-		final Map<String, Object> map = BeanMapper
-		        .toMap(new BeanWithListAttributes());
-		Assert.assertEquals(3, map.size());
-		final BeanWithListAttributes bean = BeanMapper.fromMap(map,
-		        BeanWithListAttributes.class);
-		Assert.assertNotNull(bean);
-	}
-
-	@Test
 	public void testToMapForBeanWithComplexAttributes() throws Exception {
 		final Map<String, Object> map = BeanMapper
 		        .toMap(new BeanWithComplexAttributes());
 		Assert.assertEquals(15, map.size());
 		final BeanWithComplexAttributes bean = BeanMapper.fromMap(map,
 		        BeanWithComplexAttributes.class);
+		Assert.assertNotNull(bean);
+	}
+
+	@Test
+	public void testToMapForBeanWithListOfSimpleAttributes() throws Exception {
+		final Map<String, Object> map = BeanMapper
+		        .toMap(new BeanWithListAttributes());
+		Assert.assertEquals(3, map.size());
+		final BeanWithListAttributes bean = BeanMapper.fromMap(map,
+		        BeanWithListAttributes.class);
 		Assert.assertNotNull(bean);
 	}
 

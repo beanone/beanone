@@ -2,7 +2,7 @@ package org.beanone;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang.SerializationUtils;
 
 /**
  * The snapshot of a bean. With a BeanSnapshot, one can easily navigate in
@@ -27,17 +27,21 @@ class BeanSnapshot<T extends Serializable> {
 	private final BeanHistory<T> beanHistory;
 	private final int version;
 
+	/**
+	 * Constructs a new instance of this from a JavaBean, its history and a
+	 * version number.
+	 *
+	 * @param bean
+	 *            the bean state this snapshot is for.
+	 * @param beanHistory
+	 *            the bean history this snapshot is part of.
+	 * @param version
+	 *            the version of this snapshot.
+	 */
 	public BeanSnapshot(T bean, BeanHistory<T> beanHistory, int version) {
-		this.state = SerializationUtils.clone(bean);
+		this.state = cloneBean(bean);
 		this.beanHistory = beanHistory;
 		this.version = version;
-	}
-
-	/**
-	 * @return The {@link BeanHistory} this snapshot is for.
-	 */
-	BeanHistory<T> getBeanHistory() {
-		return beanHistory;
 	}
 
 	/**
@@ -46,15 +50,55 @@ class BeanSnapshot<T extends Serializable> {
 	 *         contained in this snapshot.
 	 */
 	public T getState() {
-		return SerializationUtils.clone(state);
+		return cloneBean(state);
 	}
 
 	/**
-	 * @return the version of the snapshot. The version is a automatically
-	 *         generated integer, it start 0 and increments by 1.
+	 * @return the version of the snapshot. The version is an automatically
+	 *         generated integer, it starts from 0 and increments by 1.
 	 */
 	public int getVersion() {
 		return version;
+	}
+
+	/**
+	 * @return the next version snapshot of the BeanHistory. If this is already
+	 *         the latest version, then return null.
+	 */
+	public BeanSnapshot<T> nextVersion() {
+		if (version >= getBeanHistory().getPatches().size()) {
+			return null;
+		} else {
+			final BeanPatch<T> patch = getBeanHistory().getPatches()
+			        .get(version);
+			return patch.addTo(this);
+		}
+	}
+
+	/**
+	 * @return the previous version snapshot of the BeanHistory. If this is
+	 *         already version 0, then return null.
+	 */
+	public BeanSnapshot<T> previousVersion() {
+		if (version == 0) {
+			return null;
+		} else {
+			final BeanPatch<T> patch = getBeanHistory().getPatches()
+			        .get(version - 1);
+			return patch.substractFrom(this);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private T cloneBean(T bean) {
+		return (T) SerializationUtils.clone(bean);
+	}
+
+	/**
+	 * @return The {@link BeanHistory} this snapshot is for.
+	 */
+	BeanHistory<T> getBeanHistory() {
+		return beanHistory;
 	}
 
 	/**
@@ -70,33 +114,5 @@ class BeanSnapshot<T extends Serializable> {
 	 */
 	boolean isLatestSnapshot() {
 		return version == getBeanHistory().getPatches().size();
-	}
-
-	/**
-	 * @return the next version of the snapshots of the BeanHistory. If this is
-	 *         already the latest version, then return null.
-	 */
-	public BeanSnapshot<T> nextVersion() {
-		if (version >= getBeanHistory().getPatches().size()) {
-			return null;
-		} else {
-			final BeanPatch<T> patch = getBeanHistory().getPatches()
-			        .get(version);
-			return patch.addTo(this);
-		}
-	}
-
-	/**
-	 * @return the previous version of the snapshots of the BeanHistory. If this
-	 *         is already version 0, then return null.
-	 */
-	public BeanSnapshot<T> previousVersion() {
-		if (version == 0) {
-			return null;
-		} else {
-			final BeanPatch<T> patch = getBeanHistory().getPatches()
-			        .get(version - 1);
-			return patch.substractFrom(this);
-		}
 	}
 }

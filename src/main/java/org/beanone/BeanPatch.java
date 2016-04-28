@@ -20,13 +20,13 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	private static final long serialVersionUID = -2602568652611370513L;
 
 	/**
-	 * Creates a patch the contains the difference in between the two passed in
+	 * Creates a patch that contains the difference in between the two passed in
 	 * JavaBeans.
 	 *
 	 * @param base
 	 *            the base of the patch is created for.
 	 * @param updated
-	 *            the updated JavaBean is the patch is applied to the base.
+	 *            the updated JavaBean if the patch is applied to the base.
 	 * @return the patch.
 	 */
 	public static <T extends Serializable> BeanPatch<T> create(T base,
@@ -72,7 +72,7 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	 * support redo operation.
 	 *
 	 * @param snapshot
-	 *            the bases snapshot the patch is applied to.
+	 *            the base snapshot the patch is applied to.
 	 * @return the new JavaBean after the patch is applied to the passed in.
 	 */
 	@SuppressWarnings("unchecked")
@@ -124,7 +124,7 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	}
 
 	/**
-	 * @return true if no additions, no deletions and updates. Otherwise return
+	 * @return false if no additions, no deletions and updates. Otherwise return
 	 *         true.
 	 */
 	public boolean hasChanges() {
