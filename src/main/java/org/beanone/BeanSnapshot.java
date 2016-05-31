@@ -2,7 +2,7 @@ package org.beanone;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang3.SerializationUtils;
 
 /**
  * The snapshot of a bean. With a BeanSnapshot, one can easily navigate in
@@ -89,9 +89,8 @@ class BeanSnapshot<T extends Serializable> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private T cloneBean(T bean) {
-		return (T) SerializationUtils.clone(bean);
+		return SerializationUtils.clone(bean);
 	}
 
 	/**
