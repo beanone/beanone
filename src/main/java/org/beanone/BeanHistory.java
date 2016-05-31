@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang3.SerializationUtils;
 
 /**
  * A document that holds the whole history of a JavaBean as a sequence of patch
@@ -107,9 +107,8 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 		return Collections.unmodifiableList(patches);
 	}
 
-	@SuppressWarnings("unchecked")
 	private T cloneBean(final T newBean) {
-		return (T) SerializationUtils.clone(newBean);
+		return SerializationUtils.clone(newBean);
 	}
 
 	private BeanPatch<T> doCreatePatch(final T newBean) {
