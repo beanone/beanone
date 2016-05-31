@@ -190,7 +190,7 @@
 					<flowInitContext>
 						<!-- You can customize your development branch name. Why? Because it's 
 							faster to type 'git push origin dvlp' than 'git push origin develop' ;-) -->
-						<developBranchName>dvlp</developBranchName>
+						<developBranchName>develop</developBranchName>
 						<!-- You can also customize your tag prefixes -->
 						<versionTagPrefix>rev-</versionTagPrefix>
 					</flowInitContext>
