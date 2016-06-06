@@ -31,8 +31,8 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	 */
 	public static <T extends Serializable> BeanPatch<T> create(T base,
 	        T updated) {
-		final Map<String, Object> baseMap = BeanMapper.toMap(base);
-		final Map<String, Object> updatedMap = BeanMapper.toMap(updated);
+		final Map<String, String> baseMap = BeanMapper.toMap(base);
+		final Map<String, String> updatedMap = BeanMapper.toMap(updated);
 
 		final Set<String> additionsKeys = new HashSet<>(updatedMap.keySet());
 		additionsKeys.removeAll(baseMap.keySet());
@@ -43,17 +43,15 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 
 		final BeanPatch<T> returns = new BeanPatch<>();
 		for (final String key : additionsKeys) {
-			returns.additions.put(key,
-			        BeanOneUtils.ensureSerializable(updatedMap.get(key)));
+			returns.additions.put(key, updatedMap.get(key));
 		}
 		for (final String key : deletionsKeys) {
-			returns.deletions.put(key,
-			        BeanOneUtils.ensureSerializable(baseMap.get(key)));
+			returns.deletions.put(key, baseMap.get(key));
 		}
 
 		for (final String key : updationsKeys) {
-			final Object oldValue = baseMap.get(key);
-			final Object newValue = updatedMap.get(key);
+			final String oldValue = baseMap.get(key);
+			final String newValue = updatedMap.get(key);
 			if (!newValue.equals(oldValue)) {
 				returns.updates.put(key,
 				        ValueDiff.makeDiff(oldValue, newValue));
@@ -63,8 +61,8 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 		return returns;
 	}
 
-	private final Map<String, Serializable> additions = new HashMap<>();
-	private final Map<String, Serializable> deletions = new HashMap<>();
+	private final Map<String, String> additions = new HashMap<>();
+	private final Map<String, String> deletions = new HashMap<>();
 	private final Map<String, ValueDiff> updates = new HashMap<>();
 
 	/**
@@ -78,19 +76,18 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	@SuppressWarnings("unchecked")
 	public BeanSnapshot<T> addTo(BeanSnapshot<T> snapshot) {
 		final T original = snapshot.getState();
-		final Map<String, Object> originalMap = BeanMapper.toMap(original);
-		for (final Entry<String, Serializable> entry : additions.entrySet()) {
+		final Map<String, String> originalMap = BeanMapper.toMap(original);
+		for (final Entry<String, String> entry : additions.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue());
 		}
-		for (final Entry<String, Serializable> entry : deletions.entrySet()) {
+		for (final Entry<String, String> entry : deletions.entrySet()) {
 			originalMap.remove(entry.getKey());
 		}
 		for (final Entry<String, ValueDiff> entry : updates.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue().getNewValue());
 		}
 
-		final T nextBean = (T) BeanMapper.fromMap(originalMap,
-		        original.getClass());
+		final T nextBean = (T) BeanMapper.fromMap(originalMap);
 
 		return new BeanSnapshot<>(nextBean, snapshot.getBeanHistory(),
 		        snapshot.getVersion() + 1);
@@ -144,19 +141,18 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	@SuppressWarnings("unchecked")
 	public BeanSnapshot<T> substractFrom(BeanSnapshot<T> snapshot) {
 		final T original = snapshot.getState();
-		final Map<String, Object> originalMap = BeanMapper.toMap(original);
-		for (final Entry<String, Serializable> entry : additions.entrySet()) {
+		final Map<String, String> originalMap = BeanMapper.toMap(original);
+		for (final Entry<String, String> entry : additions.entrySet()) {
 			originalMap.remove(entry.getKey());
 		}
-		for (final Entry<String, Serializable> entry : deletions.entrySet()) {
+		for (final Entry<String, String> entry : deletions.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue());
 		}
 		for (final Entry<String, ValueDiff> entry : updates.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue().getOldValue());
 		}
 
-		final T previousBean = (T) BeanMapper.fromMap(originalMap,
-		        original.getClass());
+		final T previousBean = (T) BeanMapper.fromMap(originalMap);
 
 		return new BeanSnapshot<>(previousBean, snapshot.getBeanHistory(),
 		        snapshot.getVersion() - 1);
