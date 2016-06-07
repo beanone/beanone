@@ -1,14 +1,10 @@
 package org.beanone.testbeans;
 
-import java.io.Serializable;
-
-public class BeanWithComplexAttributes implements Serializable {
-	private static final long serialVersionUID = 3825035186427202158L;
-	private final int integer = 1;
-	private final BeanWithMapAttribute beanWithMap = new BeanWithMapAttribute();
-	private final BeanWithListAttributes beanWithList = new BeanWithListAttributes();
-	private final UserDetail userDetail = TestObjectFactory
-	        .createTestUserDetail();
+public class BeanWithComplexAttributes {
+	private int integer = 1;
+	private BeanWithMapAttribute beanWithMap = new BeanWithMapAttribute();
+	private BeanWithListAttributes beanWithList = new BeanWithListAttributes();
+	private UserDetail userDetail = TestObjectFactory.createTestUserDetail();
 
 	public BeanWithListAttributes getBeanWithList() {
 		return beanWithList;
@@ -24,5 +20,21 @@ public class BeanWithComplexAttributes implements Serializable {
 
 	public UserDetail getUserDetail() {
 		return userDetail;
+	}
+
+	public void setBeanWithList(BeanWithListAttributes beanWithList) {
+		this.beanWithList = beanWithList;
+	}
+
+	public void setBeanWithMap(BeanWithMapAttribute beanWithMap) {
+		this.beanWithMap = beanWithMap;
+	}
+
+	public void setInteger(int integer) {
+		this.integer = integer;
+	}
+
+	public void setUserDetail(UserDetail userDetail) {
+		this.userDetail = userDetail;
 	}
 }

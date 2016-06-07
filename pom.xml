@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.beanone</groupId>
 	<artifactId>beanone</artifactId>
-	<version>1.2</version>
+	<version>2.0</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A utility library that allows one to easily manage the history of a JavaBean</description>
@@ -28,11 +28,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<commons-lang.version>3.4</commons-lang.version>
 		<commons-beanutils.version>1.9.2</commons-beanutils.version>
-		<spring.version>4.2.5.RELEASE</spring.version>
 		<jackson-databind.version>2.7.3</jackson-databind.version>
 		<gson.version>2.4</gson.version>
 		<junit.version>4.12</junit.version>
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+		<flattener.version>1.1</flattener.version>
+		<argLine>-Xmx128m</argLine>
 	</properties>
 
 	<dependencies>
@@ -45,11 +46,6 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commons-beanutils.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-core</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -66,6 +62,11 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.beanone</groupId>
+			<artifactId>flattener</artifactId>
+			<version>${flattener.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -190,7 +191,7 @@
 					<flowInitContext>
 						<!-- You can customize your development branch name. Why? Because it's 
 							faster to type 'git push origin dvlp' than 'git push origin develop' ;-) -->
-						<developBranchName>dvlp</developBranchName>
+						<developBranchName>develop</developBranchName>
 						<!-- You can also customize your tag prefixes -->
 						<versionTagPrefix>rev-</versionTagPrefix>
 					</flowInitContext>
@@ -198,6 +199,38 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<!-- Minimal supported version is 2.4 -->
+						<version>2.13</version>
+						<configuration>
+							<properties>
+								<property>
+									<name>listener</name>
+									<value>org.sonar.java.jacoco.JUnitListener</value>
+								</property>
+							</properties>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.sonarsource.java</groupId>
+					<artifactId>sonar-jacoco-listeners</artifactId>
+					<version>3.8</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 
 	<issueManagement>

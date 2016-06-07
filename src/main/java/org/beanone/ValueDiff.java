@@ -17,27 +17,27 @@ import java.io.Serializable;
 public class ValueDiff implements Serializable {
 	private static final long serialVersionUID = 750309839430474647L;
 
-	public static ValueDiff makeDiff(Object oldValue, Object newValue) {
+	public static ValueDiff makeDiff(String oldValue, String newValue) {
 		final ValueDiff returns = new ValueDiff();
-		returns.oldValue = BeanOneUtils.ensureSerializable(oldValue);
-		returns.newValue = BeanOneUtils.ensureSerializable(newValue);
+		returns.oldValue = oldValue;
+		returns.newValue = newValue;
 		return returns;
 	}
 
 	// note that if these member attributes are declared as Serializable, then
 	// Gson is going to fail on de-serialization.
-	private Object oldValue;
-	private Object newValue;
+	private String oldValue;
+	private String newValue;
 
 	public ValueDiff() {
 		// default constructor to make this a valid JavaBean
 	}
 
-	public Object getNewValue() {
+	public String getNewValue() {
 		return newValue;
 	}
 
-	public Object getOldValue() {
+	public String getOldValue() {
 		return oldValue;
 	}
 }

@@ -1,9 +1,6 @@
 package org.beanone.testbeans;
 
-import java.io.Serializable;
-
-public class BeanWithSimpleAttributes implements Serializable {
-	private static final long serialVersionUID = -776760960898452272L;
+public class BeanWithSimpleAttributes {
 	private int integer = 1;
 	private Integer intObject = 2;
 	private String string = "A string";

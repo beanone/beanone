@@ -1,13 +1,11 @@
 package org.beanone.testbeans;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BeanWithArrayAttributes implements Serializable {
-	private static final long serialVersionUID = 103005671110689505L;
-	private final int[] integers = new int[] { 1, 2, 3 };
-	private final Map<Object, Object> intMap = new HashMap<>();
+public class BeanWithArrayAttributes {
+	private int[] integers = new int[] { 1, 2, 3 };
+	private Map<Object, Object> intMap = new HashMap<>();
 
 	public BeanWithArrayAttributes() {
 		intMap.put("array", integers);
@@ -20,5 +18,13 @@ public class BeanWithArrayAttributes implements Serializable {
 
 	public Map<Object, Object> getIntMap() {
 		return intMap;
+	}
+
+	public void setIntegers(int[] integers) {
+		this.integers = integers;
+	}
+
+	public void setIntMap(Map<Object, Object> intMap) {
+		this.intMap = intMap;
 	}
 }
