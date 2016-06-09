@@ -10,9 +10,14 @@ public class Person implements Serializable {
 	private String firstName;
 	private String lastName;
 	private final List<String> emailAddresses = new ArrayList<String>();
+	private final List<String> phones = new ArrayList<String>();
 
 	public void addEmailAddress(String emailAddress) {
-		this.emailAddresses.add(emailAddress);
+		emailAddresses.add(emailAddress);
+	}
+
+	public void addPhone(String phone) {
+		phones.add(phone);
 	}
 
 	public List<String> getEmailAddresses() {
@@ -25,6 +30,10 @@ public class Person implements Serializable {
 
 	public String getLastName() {
 		return lastName;
+	}
+
+	public List<String> getPhones() {
+		return phones;
 	}
 
 	public void setFirstName(String firstName) {
