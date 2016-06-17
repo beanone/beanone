@@ -11,6 +11,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class BeanHistoryTest {
+	private static final String BEAN_WITH_THREE_VERSIONS_JSON = "{\"initialState\":{\"position\":1,\"userId\":\"bob.smith\",\"person\":{\"firstName\":\"Bob\",\"lastName\":\"Smith\",\"emailAddresses\":[],\"phones\":[]},\"addresses\":[{\"streetAddress\":\"123 Main St.\",\"city\":\"Seattle\",\"zip\":123}],\"relations\":{\"brother\":{\"firstName\":\"William\",\"lastName\":\"Smith\",\"emailAddresses\":[],\"phones\":[]}}},\"latestState\":{\"position\":1,\"userId\":\"bob.smith\",\"person\":{\"firstName\":\"Bobby\",\"lastName\":\"Smith\",\"emailAddresses\":[],\"phones\":[]},\"addresses\":[{\"streetAddress\":\"123 Main St.\",\"city\":\"Seattle\",\"zip\":123},{\"streetAddress\":\"222 Blue Ave.\",\"city\":\"Master\",\"zip\":111}],\"relations\":{}},\"patches\":[{\"additions\":{},\"deletions\":{},\"updates\":{\"person.firstName\":{\"oldValue\":\"S,Bob\",\"newValue\":\"S,Bobby\"}}},{\"additions\":{\"addresses.1.serialVersionUID\":\"L,-7200555141567811331\",\"person.emailAddresses#2size\":\"0\",\"person.firstName\":\"S,Bobby\",\"addresses.1.zip\":\"I,111\",\"addresses.1#1ctype\":\"org.beanone.testbeans.Address\",\"person.lastName\":\"S,Smith\",\"addresses.1.city\":\"S,Master\",\"addresses.1.streetAddress\":\"S,222 Blue Ave.\",\"person#1ctype\":\"org.beanone.testbeans.Person\",\"person.phones#1ctype\":\"java.util.ArrayList\",\"person.phones#2size\":\"0\",\"person.emailAddresses#1ctype\":\"java.util.ArrayList\",\"person.serialVersionUID\":\"L,-5001884724414260401\"},\"deletions\":{\"relations.1#value.emailAddresses#2size\":\"0\",\"relations.1#value.lastName\":\"S,Smith\",\"relations.1#value.phones#1ctype\":\"java.util.ArrayList\",\"relations.1#value.emailAddresses#1ctype\":\"java.util.ArrayList\",\"person#ref\":\"person\",\"relations.1#value#1ctype\":\"org.beanone.testbeans.Person\",\"relations.1#value.firstName\":\"S,William\",\"relations.1#value.serialVersionUID\":\"L,-5001884724414260401\",\"relations.1#value.phones#2size\":\"0\",\"relations.1#key\":\"S,brother\"},\"updates\":{\"relations#2size\":{\"oldValue\":\"1\",\"newValue\":\"0\"},\"addresses#2size\":{\"oldValue\":\"1\",\"newValue\":\"2\"}}}]}";
+	private final Gson gson = new GsonBuilder().create();
+
 	@Test
 	public void testBeanHistory() throws Exception {
 		final BeanHistory<UserDetail> bh = TestObjectFactory
@@ -34,13 +37,30 @@ public class BeanHistoryTest {
 	}
 
 	@Test
+	public void testBeanHistoryInitialStateFinalStatePatches()
+	        throws Exception {
+		final BeanHistory<UserDetail> bh = TestObjectFactory
+		        .createTestBeanHistoryWithThreeVersions();
+		final BeanHistory<UserDetail> bh1 = new BeanHistory<>(
+		        bh.getInitialState(), bh.getLatestState(), bh.getPatches());
+		Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
+		        this.gson.toJson(bh1));
+		// final BeanHistory<UserDetail> bh2 = new BeanHistory<>(null,
+		// bh.getLatestState(), bh.getPatches());
+		// Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
+		// this.gson.toJson(bh2));
+		// final BeanHistory<UserDetail> bh3 = new BeanHistory<>(
+		// bh.getInitialState(), null, bh.getPatches());
+		// Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
+		// this.gson.toJson(bh3));
+	}
+
+	@Test
 	public void testBeanHistoryWithPatchesSerializedAsJson() throws Exception {
 		final BeanHistory<UserDetail> beanHistory = TestObjectFactory
 		        .createTestBeanHistoryWithThreeVersions();
-		final Gson gson = new GsonBuilder().create();
-		Assert.assertEquals(
-		        "{\"initialState\":{\"position\":1,\"userId\":\"bob.smith\",\"person\":{\"firstName\":\"Bob\",\"lastName\":\"Smith\",\"emailAddresses\":[]},\"addresses\":[{\"streetAddress\":\"123 Main St.\",\"city\":\"Seattle\",\"zip\":123}],\"relations\":{\"brother\":{\"firstName\":\"William\",\"lastName\":\"Smith\",\"emailAddresses\":[]}}},\"latestState\":{\"position\":1,\"userId\":\"bob.smith\",\"person\":{\"firstName\":\"Bobby\",\"lastName\":\"Smith\",\"emailAddresses\":[]},\"addresses\":[{\"streetAddress\":\"123 Main St.\",\"city\":\"Seattle\",\"zip\":123},{\"streetAddress\":\"222 Blue Ave.\",\"city\":\"Master\",\"zip\":111}],\"relations\":{}},\"patches\":[{\"additions\":{},\"deletions\":{},\"updates\":{\"person.firstName\":{\"oldValue\":\"S,Bob\",\"newValue\":\"S,Bobby\"}}},{\"additions\":{\"addresses.1#1ctype\":\"org.beanone.testbeans.Address\",\"addresses.1.serialVersionUID\":\"L,-7200555141567811331\",\"person.emailAddresses#2size\":\"0\",\"person.lastName\":\"S,Smith\",\"addresses.1.city\":\"S,Master\",\"addresses.1.streetAddress\":\"S,222 Blue Ave.\",\"person#1ctype\":\"org.beanone.testbeans.Person\",\"person.firstName\":\"S,Bobby\",\"addresses.1.zip\":\"I,111\",\"person.emailAddresses#1ctype\":\"java.util.ArrayList\",\"person.serialVersionUID\":\"L,-5001884724414260401\"},\"deletions\":{\"relations.1#value.emailAddresses#2size\":\"0\",\"relations.1#value.lastName\":\"S,Smith\",\"relations.1#value.emailAddresses#1ctype\":\"java.util.ArrayList\",\"person#ref\":\"person\",\"relations.1#value#1ctype\":\"org.beanone.testbeans.Person\",\"relations.1#value.firstName\":\"S,William\",\"relations.1#value.serialVersionUID\":\"L,-5001884724414260401\",\"relations.1#key\":\"S,brother\"},\"updates\":{\"relations#2size\":{\"oldValue\":\"1\",\"newValue\":\"0\"},\"addresses#2size\":{\"oldValue\":\"1\",\"newValue\":\"2\"}}}]}",
-		        gson.toJson(beanHistory));
+		Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
+		        this.gson.toJson(beanHistory));
 	}
 
 	@Test

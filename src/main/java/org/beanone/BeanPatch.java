@@ -77,19 +77,19 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	public BeanSnapshot<T> addTo(BeanSnapshot<T> snapshot) {
 		final T original = snapshot.getState();
 		final Map<String, String> originalMap = BeanMapper.toMap(original);
-		for (final Entry<String, String> entry : additions.entrySet()) {
+		for (final Entry<String, String> entry : this.additions.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue());
 		}
-		for (final Entry<String, String> entry : deletions.entrySet()) {
+		for (final Entry<String, String> entry : this.deletions.entrySet()) {
 			originalMap.remove(entry.getKey());
 		}
-		for (final Entry<String, ValueDiff> entry : updates.entrySet()) {
+		for (final Entry<String, ValueDiff> entry : this.updates.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue().getNewValue());
 		}
 
 		final T nextBean = (T) BeanMapper.fromMap(originalMap);
 
-		return new BeanSnapshot<>(nextBean, snapshot.getBeanHistory(),
+		return new BeanSnapshot<>(nextBean, snapshot.getPatches(),
 		        snapshot.getVersion() + 1);
 	}
 
@@ -99,7 +99,7 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	 * @return a map of attribute key / value pairs.
 	 */
 	public Map<String, Object> getAdditions() {
-		return Collections.unmodifiableMap(additions);
+		return Collections.unmodifiableMap(this.additions);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	 * @return a map of attribute key / value pairs.
 	 */
 	public Map<String, Object> getDeletions() {
-		return Collections.unmodifiableMap(deletions);
+		return Collections.unmodifiableMap(this.deletions);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	 * @return a map of attribute key / value pairs.
 	 */
 	public Map<String, ValueDiff> getUpdates() {
-		return Collections.unmodifiableMap(updates);
+		return Collections.unmodifiableMap(this.updates);
 	}
 
 	/**
@@ -125,8 +125,8 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	 *         true.
 	 */
 	public boolean hasChanges() {
-		return !(additions.isEmpty() && deletions.isEmpty()
-		        && updates.isEmpty());
+		return !(this.additions.isEmpty() && this.deletions.isEmpty()
+		        && this.updates.isEmpty());
 	}
 
 	/**
@@ -142,19 +142,19 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 	public BeanSnapshot<T> substractFrom(BeanSnapshot<T> snapshot) {
 		final T original = snapshot.getState();
 		final Map<String, String> originalMap = BeanMapper.toMap(original);
-		for (final Entry<String, String> entry : additions.entrySet()) {
+		for (final Entry<String, String> entry : this.additions.entrySet()) {
 			originalMap.remove(entry.getKey());
 		}
-		for (final Entry<String, String> entry : deletions.entrySet()) {
+		for (final Entry<String, String> entry : this.deletions.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue());
 		}
-		for (final Entry<String, ValueDiff> entry : updates.entrySet()) {
+		for (final Entry<String, ValueDiff> entry : this.updates.entrySet()) {
 			originalMap.put(entry.getKey(), entry.getValue().getOldValue());
 		}
 
 		final T previousBean = (T) BeanMapper.fromMap(originalMap);
 
-		return new BeanSnapshot<>(previousBean, snapshot.getBeanHistory(),
+		return new BeanSnapshot<>(previousBean, snapshot.getPatches(),
 		        snapshot.getVersion() - 1);
 	}
 }
