@@ -25,7 +25,7 @@ public class BeanMapperTest {
 	public void testToMapForBeanWithComplexAttributes() throws Exception {
 		final Map<String, String> map = BeanMapper
 		        .toMap(new BeanWithComplexAttributes());
-		Assert.assertEquals(45, map.size());
+		Assert.assertEquals(41, map.size());
 		final BeanWithComplexAttributes bean = (BeanWithComplexAttributes) BeanMapper
 		        .fromMap(map);
 		Assert.assertNotNull(bean);
