@@ -12,8 +12,8 @@ public class BeanSnapshotTest {
 		final BeanHistory<UserDetail> beanHistory = TestObjectFactory
 		        .createTestBeanHistoryWithThreeVersions();
 		final BeanSnapshot<UserDetail> snapshot = new BeanSnapshot<UserDetail>(
-		        beanHistory.getInitialState(), beanHistory, 0);
-		Assert.assertNotNull(snapshot.getBeanHistory());
+		        beanHistory.getInitialState(), beanHistory.getPatches(), 0);
+		Assert.assertNotNull(snapshot.getPatches());
 		Assert.assertNotNull(snapshot.getState());
 		Assert.assertEquals(0, snapshot.getVersion());
 	}

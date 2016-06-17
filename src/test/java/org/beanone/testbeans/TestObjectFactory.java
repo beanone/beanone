@@ -41,6 +41,7 @@ public class TestObjectFactory {
 		        userDetail);
 		userDetail.getPerson().setFirstName("Bobby");
 		beanHistory.createPatch(userDetail);
+
 		userDetail.addAddress(TestObjectFactory.createAddress("222 Blue Ave.",
 		        "Master", 111));
 		userDetail.getRelations().clear();
