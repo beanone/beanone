@@ -1,5 +1,6 @@
 package org.beanone;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.beanone.testbeans.TestObjectFactory;
@@ -53,6 +54,23 @@ public class BeanHistoryTest {
 		        bh.getInitialState(), null, bh.getPatches());
 		Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
 		        this.gson.toJson(bh3));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBeanHistoryIntialStateFinalStateBothNull()
+	        throws Exception {
+		new BeanHistory<>(null, null, new ArrayList<>());
+	}
+
+	@Test
+	public void testBeanHistoryPatchesNull() throws Exception {
+		final BeanHistory<UserDetail> bh = TestObjectFactory
+		        .createTestBeanHistory();
+		final BeanHistory<UserDetail> bh1 = new BeanHistory<>(
+		        bh.getInitialState(), null, null);
+		Assert.assertNotNull(bh1.getLatestState());
+		Assert.assertEquals(this.gson.toJson(bh1.getInitialState()),
+		        this.gson.toJson(bh1.getLatestState()));
 	}
 
 	@Test

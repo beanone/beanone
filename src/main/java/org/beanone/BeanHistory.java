@@ -60,10 +60,10 @@ public class BeanHistory<T extends Serializable> implements Serializable {
 		}
 
 		this.initialState = initialState == null
-		        ? calculateInitialState(finalState, patches)
+		        ? calculateInitialState(finalState, this.patches)
 		        : cloneBean(initialState);
 		this.latestState = finalState == null
-		        ? calculateLatestState(initialState, patches)
+		        ? calculateLatestState(initialState, this.patches)
 		        : cloneBean(finalState);
 	}
 
