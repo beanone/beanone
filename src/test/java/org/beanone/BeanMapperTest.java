@@ -15,7 +15,7 @@ public class BeanMapperTest {
 	public void testToMapForBeanWithArrayAttributes() throws Exception {
 		final Map<String, String> map = BeanMapper
 		        .toMap(new BeanWithArrayAttributes());
-		Assert.assertEquals(23, map.size());
+		Assert.assertEquals(13, map.size());
 		final BeanWithArrayAttributes bean = (BeanWithArrayAttributes) BeanMapper
 		        .fromMap(map);
 		Assert.assertNotNull(bean);
