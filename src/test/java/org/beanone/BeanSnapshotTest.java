@@ -16,6 +16,20 @@ public class BeanSnapshotTest {
 		Assert.assertNotNull(snapshot.getPatches());
 		Assert.assertNotNull(snapshot.getState());
 		Assert.assertEquals(0, snapshot.getVersion());
+		Assert.assertFalse(snapshot.getState().getRelations().isEmpty());
+		BeanSnapshot<UserDetail> nextVersion = snapshot.nextVersion();
+		Assert.assertNotNull(nextVersion);
+		Assert.assertEquals("Bobby",
+		        nextVersion.getState().getPerson().getFirstName());
+		Assert.assertFalse(nextVersion.getState().getRelations().isEmpty());
+		nextVersion = nextVersion.nextVersion();
+		Assert.assertNotNull(nextVersion);
+		Assert.assertTrue(nextVersion.getState().getRelations().isEmpty());
+		Assert.assertEquals(2, nextVersion.getState().getAddresses().size());
+		Assert.assertEquals("123 Main St.", nextVersion.getState()
+		        .getAddresses().get(0).getStreetAddress());
+		Assert.assertEquals("222 Blue Ave.", nextVersion.getState()
+		        .getAddresses().get(1).getStreetAddress());
 	}
 
 	@Test

@@ -45,14 +45,14 @@ public class BeanHistoryTest {
 		        bh.getInitialState(), bh.getLatestState(), bh.getPatches());
 		Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
 		        this.gson.toJson(bh1));
-		// final BeanHistory<UserDetail> bh2 = new BeanHistory<>(null,
-		// bh.getLatestState(), bh.getPatches());
-		// Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
-		// this.gson.toJson(bh2));
-		// final BeanHistory<UserDetail> bh3 = new BeanHistory<>(
-		// bh.getInitialState(), null, bh.getPatches());
-		// Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
-		// this.gson.toJson(bh3));
+		final BeanHistory<UserDetail> bh2 = new BeanHistory<>(null,
+		        bh.getLatestState(), bh.getPatches());
+		Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
+		        this.gson.toJson(bh2));
+		final BeanHistory<UserDetail> bh3 = new BeanHistory<>(
+		        bh.getInitialState(), null, bh.getPatches());
+		Assert.assertEquals(BEAN_WITH_THREE_VERSIONS_JSON,
+		        this.gson.toJson(bh3));
 	}
 
 	@Test
