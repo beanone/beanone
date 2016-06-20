@@ -19,6 +19,10 @@ import java.util.Set;
 public class BeanPatch<T extends Serializable> implements Serializable {
 	private static final long serialVersionUID = -2602568652611370513L;
 
+	private final Map<String, String> additions = new HashMap<>();
+
+	private final Map<String, String> deletions = new HashMap<>();
+	private final Map<String, ValueDiff> updates = new HashMap<>();
 	/**
 	 * Creates a patch that contains the difference in between the two passed in
 	 * JavaBeans.
@@ -60,10 +64,6 @@ public class BeanPatch<T extends Serializable> implements Serializable {
 
 		return returns;
 	}
-
-	private final Map<String, String> additions = new HashMap<>();
-	private final Map<String, String> deletions = new HashMap<>();
-	private final Map<String, ValueDiff> updates = new HashMap<>();
 
 	/**
 	 * Applies the current patch to the passed in. This method can be used to

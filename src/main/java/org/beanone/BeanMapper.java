@@ -19,6 +19,10 @@ import org.beanone.flattener.FlattenerTool;
 public class BeanMapper {
 	private static final FlattenerTool flattenerTool = new FlattenerTool();
 
+	private BeanMapper() {
+		// private for utility
+	}
+
 	/**
 	 * un-flattens the passed in Map of simple values into a JavaBean of the
 	 * passed in class type.
@@ -44,9 +48,5 @@ public class BeanMapper {
 	 */
 	public static Map<String, String> toMap(Object bean) {
 		return bean == null ? null : flattenerTool.flat(bean);
-	}
-
-	private BeanMapper() {
-		// private for utility
 	}
 }
